@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Community;
 use App\Models\CommunityMembership;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -51,13 +52,20 @@ class CommunityController extends Controller
         return view('communities.index', compact('communities', 'filters'));
     }
 
-    public function show(Request $request, string $slug): View
+    public function show(Request $request, string $slug): View|JsonResponse
     {
         $community = Community::query()->discoverable()->with('church')->where('slug', $slug)->firstOrFail();
         $active = $request->user() && CommunityMembership::where('community_id', $community->id)->where('user_id', $request->user()->id)->where('status', 'active')->exists();
-        $posts = $community->posts()->where('status', 'published')->where('published_at', '<=', now())->whereIn('audience', $active ? ['public', 'members'] : ['public'])->with(['author', 'community'])->latest('published_at')->orderByDesc('id')->withInteractions()->paginate(8);
+        $posts = $community->posts()->where('status', 'published')->where('published_at', '<=', now())->whereIn('audience', $active ? ['public', 'members'] : ['public'])->with(['author', 'community'])->latest('published_at')->orderByDesc('id')->withInteractions()->cursorPaginate(8);
 
         $membership = $request->user() ? CommunityMembership::where('community_id', $community->id)->where('user_id', $request->user()->id)->first() : null;
+
+        if ($request->header('X-Kanaa-Feed') === 'posts') {
+            return response()->json([
+                'html' => view('components.post-feed-items', compact('posts'))->render(),
+                'next' => $posts->nextPageUrl(),
+            ])->header('Cache-Control', 'private, no-store');
+        }
 
         return view('communities.show', compact('community', 'posts', 'membership'));
     }

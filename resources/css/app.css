@@ -256,3 +256,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 [data-photo-preview] button { font-size: 12px; margin-top: 10px; color: #7f714d; text-decoration: underline; }
 .post-photo { display: block; background: #edf0e5; }
 .post-photo img { width: 100%; height: auto; max-height: 600px; object-fit: contain; }
+
+.feed-loader { display: grid; justify-items: center; gap: 13px; padding: 25px 12px; min-height: 50px; }
+.feed-status { font-size: 12px; color: #78816f; text-align: center; line-height: 1.8; }
+[data-feed-next][aria-disabled="true"] { opacity: .6; cursor: wait; }
+[data-infinite-feed][aria-busy="true"] .feed-status::before { content: ''; display: inline-block; height: 12px; width: 12px; margin-right: 9px; border: 2px solid #cdd6bf; border-top-color: #28573a; border-radius: 50%; animation: feed-spin .8s linear infinite; vertical-align: -2px; }
+@keyframes feed-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { [data-infinite-feed][aria-busy="true"] .feed-status::before { animation: none; } }

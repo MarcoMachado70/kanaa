@@ -4,7 +4,7 @@
 <div class="community-profile-heading"><x-community-avatar :community="$community"/><div><h1>{{ $community->name }}</h1><p class="location-line"><x-icon name="pin" size="15"/>{{ $community->city }}/{{ $community->state }}<span>·</span>{{ $community->visibility === 'approval' ? 'Entrada mediante aprovação' : 'Comunidade pública' }}</p></div></div>
 <div class="community-detail-grid"><section>
 @if($membership?->status === 'active')<x-composer :community="$community"/>@endif
-<div class="section-heading"><h2>Mural da comunidade</h2><span class="muted text-xs">Publicações da comunidade</span></div><div class="post-list">@forelse($posts as $post)<x-post-card :post="$post"/>@empty<div class="empty-state"><x-icon name="book" size="30"/><h2>A conversa está começando.</h2><p>Esta comunidade ainda não tem publicações públicas.</p></div>@endforelse</div><div class="pagination">{{ $posts->links() }}</div></section>
+<div class="section-heading"><h2>Mural da comunidade</h2><span class="muted text-xs">Publicações da comunidade</span></div><x-post-feed :posts="$posts"/></section>
 <aside><section class="rail-card"><h2>Sobre a comunidade</h2><p class="whitespace-pre-line">{{ $community->description }}</p>@if($community->church)<div class="affiliation"><span class="eyebrow">VINCULADA À IGREJA</span><a href="{{ route('churches.show', $community->church) }}">{{ $community->church->name }} <x-icon name="arrow" size="16"/></a></div>@else<p class="privacy-tag">Comunidade independente</p>@endif
 @can('manage', $community)<div class="participation-box"><a class="button" href="{{ route('communities.manage', $community) }}">Gerenciar comunidade <x-icon name="people" size="17"/></a></div>@endcan
 <div class="participation-box">

@@ -1,3 +1,3 @@
 <x-layout :title="$user->name"><div class="community-profile-cover"><x-landscape/></div><div class="page-heading profile-heading"><div><span class="eyebrow">CAMINHOS QUE SE ENCONTRAM</span><h1>{{ $user->name }}</h1><p>{{ $user->city }}</p><p class="whitespace-pre-line">{{ $user->bio }}</p></div>@if(auth()->id()===$user->id)<a class="button button-light" href="{{ route('profile.edit') }}">Editar perfil</a>@endif</div>
 @if(auth()->id()===$user->id)<x-composer/>@endif
-<div class="section-heading"><h2>Publicações</h2></div><div class="post-list">@forelse($posts as $post)<x-post-card :post="$post"/>@empty<div class="empty-state"><h2>Novas histórias começam aqui.</h2><p>Ainda não há publicações para mostrar.</p></div>@endforelse</div><div class="pagination">{{ $posts->links() }}</div></x-layout>
+<div class="section-heading"><h2>Publicações</h2></div><x-post-feed :posts="$posts"/></x-layout>

@@ -6,8 +6,7 @@
         <section class="discovery-strip" aria-label="Explore por interesse"><a href="{{ route('communities.index', ['type' => 'jovens']) }}"><span class="interest-icon tone-jovens"><x-icon name="people"/></span>Fazer parte</a><a href="{{ route('communities.index', ['type' => 'estudos']) }}"><span class="interest-icon tone-estudos"><x-icon name="book"/></span>Aprender juntos</a><a href="{{ route('communities.index', ['type' => 'voluntariado']) }}"><span class="interest-icon tone-voluntariado"><x-icon name="heart"/></span>Servir ao próximo</a></section>
         <x-composer/>
 <div class="section-heading feed-heading"><div><span class="eyebrow">VIDA EM COMUNIDADE</span><h2>No mural da Kanaã</h2></div><span class="muted text-xs">Publicações públicas</span></div>
-        <div class="post-list">@forelse ($posts as $post)<x-post-card :post="$post"/>@empty<div class="empty-state"><x-icon name="leaf" size="32"/><h2>Novas histórias começam aqui.</h2><p>As publicações públicas das comunidades aparecerão neste mural.</p><a href="{{ route('communities.index') }}" class="button">Conhecer comunidades</a></div>@endforelse</div>
-        <div class="pagination">{{ $posts->links() }}</div>
+        <x-post-feed :posts="$posts"/>
     </div>
     <aside class="right-rail">
         <section class="rail-card"><span class="eyebrow">SEU PRÓXIMO ENCONTRO</span><h2>Uma igreja.<br>Muitas possibilidades.</h2><p>Na sua cidade ou em uma nova jornada, encontre uma comunidade de fé para conhecer.</p><a href="{{ route('churches.index') }}" class="button"><x-icon name="compass" size="17"/>Explorar igrejas</a><x-landscape class="rail-landscape"/></section>
