@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\CommunityPost;
 use App\Models\User;
+use App\Support\DemoSeederSettings;
 use App\Support\PostPhotoStorage;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
@@ -12,9 +13,7 @@ class PhotoDemoSeeder extends Seeder
 {
     public function run(): void
     {
-        if (! app()->environment(['local', 'testing'])) {
-            return;
-        }
+        DemoSeederSettings::ensureAllowed();
         $users = User::whereIn('email', ['membro@kanaa.test', 'gestor@kanaa.test', 'privado@kanaa.test'])->get();
         $photos = app(PostPhotoStorage::class);
         foreach ($users as $user) {

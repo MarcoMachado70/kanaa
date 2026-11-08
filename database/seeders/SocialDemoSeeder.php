@@ -6,7 +6,7 @@ use App\Models\Community;
 use App\Models\CommunityMembership;
 use App\Models\CommunityPost;
 use App\Models\User;
-use Faker\Factory;
+use App\Support\DemoSeederSettings;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -15,13 +15,11 @@ class SocialDemoSeeder extends Seeder
 {
     public function run(): void
     {
-        if (! app()->environment(['local', 'testing'])) {
-            return;
-        }
+        DemoSeederSettings::ensureAllowed();
         $this->call([ChurchSeeder::class, CommunitySeeder::class]);
-        $faker = Factory::create('pt_BR');
-        $faker->seed(20261108);
-        $password = Hash::make('KanaaDemo2026!');
+        $firstNames = ['Rafael', 'Camila', 'Gabriel', 'Juliana', 'Daniel', 'Fernanda', 'André', 'Priscila', 'Tiago', 'Raquel'];
+        $lastNames = ['Martins', 'Oliveira', 'Santos', 'Ribeiro', 'Carvalho', 'Ferreira'];
+        $password = Hash::make(DemoSeederSettings::password());
         $cities = ['Curitiba', 'São Paulo', 'Belo Horizonte', 'Recife', 'Joinville', 'Londrina'];
         $bios = ['A fé se fortalece quando caminhamos juntos. Gosto de música e de boas conversas.', 'Aprendendo a servir com os dons que recebi. Por aqui compartilho reflexões e descobertas.', 'Leitura, café e comunidade. Sempre aberto a aprender algo novo.', 'Quero fazer parte de uma comunidade que cuida das pessoas e da cidade.'];
         $texts = ['Hoje reservei um tempo para agradecer pelas pequenas coisas. Qual foi a sua boa notícia da semana?', 'Uma conversa atenta pode transformar o dia de alguém. Que a gente saiba ouvir com carinho.', 'Compartilhando uma reflexão: a esperança também se cultiva nas escolhas simples do dia a dia.', 'Quem mais gosta de estudar a Bíblia com um café por perto? Vamos compartilhar nossas leituras.', 'Servir ao próximo começa perto de nós. Tenho aprendido muito participando da comunidade.', 'A música fez parte do meu momento de oração hoje. Como você costuma separar esse tempo?'];
@@ -32,7 +30,7 @@ class SocialDemoSeeder extends Seeder
             };
             $user = User::firstOrNew(['email' => $email]);
             $user->forceFill(['name' => match ($index) {
-                1 => 'Ana Souza', 2 => 'Lucas Mendes', 3 => 'Mariana Alves', 4 => 'Pedro Lima', 5 => 'Beatriz Costa', default => $faker->name()
+                1 => 'Ana Souza', 2 => 'Lucas Mendes', 3 => 'Mariana Alves', 4 => 'Pedro Lima', 5 => 'Beatriz Costa', default => $firstNames[($index - 1) % 10].' '.$lastNames[intdiv($index - 1, 10)]
             }, 'password' => $password, 'email_verified_at' => now(), 'bio' => $bios[($index - 1) % 4], 'city' => $cities[($index - 1) % 6], 'public_profile' => $index !== 4 && $index % 10 !== 0])->save();
             $users->push($user);
             foreach (range(1, 4) as $postIndex) {

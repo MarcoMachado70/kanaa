@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Church;
+use App\Support\DemoSeederSettings;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -10,9 +11,7 @@ class ChurchSeeder extends Seeder
 {
     public function run(): void
     {
-        if (! app()->environment(['local', 'testing'])) {
-            return;
-        }
+        DemoSeederSettings::ensureAllowed();
 
         foreach (['Comunidade Esperança' => 'Batista', 'Comunidade do Caminho' => 'Presbiteriana', 'Comunidade Vida Nova' => null] as $name => $denomination) {
             $church = Church::updateOrCreate(['slug' => Str::slug($name)], [

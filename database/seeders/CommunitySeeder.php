@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Church;
 use App\Models\Community;
+use App\Support\DemoSeederSettings;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -11,9 +12,7 @@ class CommunitySeeder extends Seeder
 {
     public function run(): void
     {
-        if (! app()->environment(['local', 'testing'])) {
-            return;
-        }
+        DemoSeederSettings::ensureAllowed();
 
         $examples = [
             ['Jovens do Caminho', 'jovens', 'Um lugar para fazer amigos, compartilhar a fé e caminhar junto. Conversas, encontros e novas histórias.', 'Fé que se vive em comunidade', 'Tem espaço para você na roda. Nossa comunidade é feita de encontros, escuta e amizade. Conheça o grupo e descubra o que podemos construir juntos.'],

@@ -7,15 +7,14 @@ use App\Models\CommunityPost;
 use App\Models\PostComment;
 use App\Models\PostLike;
 use App\Models\User;
+use App\Support\DemoSeederSettings;
 use Illuminate\Database\Seeder;
 
 class InteractionDemoSeeder extends Seeder
 {
     public function run(): void
     {
-        if (! app()->environment(['local', 'testing'])) {
-            return;
-        }
+        DemoSeederSettings::ensureAllowed();
         $users = User::where('email', 'like', '%@kanaa.test')->orderBy('id')->get();
         if ($users->isEmpty()) {
             return;
