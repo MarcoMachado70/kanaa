@@ -5,11 +5,13 @@ use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\CommunityManagementController;
 use App\Http\Controllers\CommunityMembershipController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PeopleController;
 use App\Http\Controllers\PostInteractionController;
 use App\Http\Controllers\PostPhotoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\SinglesController;
 use App\Http\Controllers\SocialPostController;
 use App\Http\Controllers\SocialProfileController;
 use Illuminate\Support\Facades\Route;
@@ -58,3 +60,24 @@ Route::middleware(['auth', 'throttle:30,1'])->group(function (): void {
 });
 
 Route::get('/publicacoes/{post}/foto', PostPhotoController::class)->name('posts.photo');
+
+Route::middleware('auth')->group(function (): void {
+    Route::get('/pessoas', [PeopleController::class, 'index'])->name('people.index');
+    Route::put('/pessoas/{user}/seguir', [PeopleController::class, 'store'])->middleware('throttle:30,1')->name('people.follow');
+    Route::delete('/pessoas/{user}/seguir', [PeopleController::class, 'destroy'])->name('people.unfollow');
+});
+
+Route::middleware('auth')->prefix('solteiros')->name('singles.')->group(function (): void {
+    Route::get('/', [SinglesController::class, 'index'])->name('index');
+    Route::put('/perfil', [SinglesController::class, 'save'])->middleware('throttle:10,1')->name('save');
+    Route::delete('/perfil', [SinglesController::class, 'pause'])->name('pause');
+    Route::put('/interesses/{profile}', [SinglesController::class, 'interest'])->middleware('throttle:15,1')->name('interest');
+    Route::delete('/interesses/{profile}', [SinglesController::class, 'cancelInterest'])->name('cancel');
+    Route::get('/matches/{match}', [SinglesController::class, 'showMatch'])->name('match');
+    Route::delete('/matches/{match}', [SinglesController::class, 'endMatch'])->name('end');
+    Route::put('/matches/{match}/autorizacao', [SinglesController::class, 'authorizeContact'])->middleware('throttle:10,1')->name('authorize');
+    Route::delete('/matches/{match}/autorizacao', [SinglesController::class, 'revokeContact'])->name('revoke');
+    Route::get('/matches/{match}/contato', [SinglesController::class, 'contact'])->name('contact');
+    Route::put('/bloqueios/{profile}', [SinglesController::class, 'block'])->middleware('throttle:10,1')->name('block');
+    Route::post('/denuncias/{profile}', [SinglesController::class, 'report'])->middleware('throttle:5,1')->name('report');
+});

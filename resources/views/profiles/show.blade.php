@@ -1,3 +1,6 @@
-<x-layout :title="$user->name"><div class="community-profile-cover"><x-landscape/></div><div class="page-heading profile-heading"><div><span class="eyebrow">CAMINHOS QUE SE ENCONTRAM</span><h1>{{ $user->name }}</h1><p>{{ $user->city }}</p><p class="whitespace-pre-line">{{ $user->bio }}</p></div>@if(auth()->id()===$user->id)<a class="button button-light" href="{{ route('profile.edit') }}">Editar perfil</a>@endif</div>
+<x-layout :title="$user->name">
+<div class="community-profile-cover"><x-landscape/></div><div class="page-heading profile-heading"><div><span class="eyebrow">CAMINHOS QUE SE ENCONTRAM</span><h1>{{ $user->name }}</h1><p>{{ $user->city }}</p><p class="whitespace-pre-line">{{ $user->bio }}</p></div>@if(auth()->id()===$user->id)<a class="button button-light" href="{{ route('profile.edit') }}">Editar perfil</a>@endif
+<x-follow-button :user="$user" :following="$isFollowing"/>
+</div>
 @if(auth()->id()===$user->id)<x-composer/>@endif
 <div class="section-heading"><h2>Publicações</h2></div><x-post-feed :posts="$posts"/></x-layout>

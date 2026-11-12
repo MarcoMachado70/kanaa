@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CommunityPost;
 use App\Models\User;
+use App\Models\UserFollow;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -36,6 +37,8 @@ class SocialProfileController extends Controller
             ])->header('Cache-Control', 'private, no-store');
         }
 
-        return view('profiles.show', compact('user', 'posts'));
+        $isFollowing = $request->user() && UserFollow::where('follower_id', $request->user()->id)->where('followed_id', $user->id)->exists();
+
+        return view('profiles.show', compact('user', 'posts', 'isFollowing'));
     }
 }

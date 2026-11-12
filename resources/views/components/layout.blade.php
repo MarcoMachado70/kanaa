@@ -21,7 +21,7 @@
     <aside class="sidebar">
         <p class="eyebrow">SEU CAMINHO COMEÇA AQUI</p>
         <nav class="main-nav" aria-label="Navegação principal">
-            @foreach (['home' => ['home', 'Início'], 'churches.index' => ['compass', 'Explorar igrejas'], 'communities.index' => ['people', 'Comunidades'], 'profile' => ['heart', 'Perfil']] as $route => [$icon, $label])
+            @foreach (['home' => ['home', 'Início'], 'churches.index' => ['compass', 'Explorar igrejas'], 'communities.index' => ['people', 'Comunidades'], 'people.index' => ['people', 'Pessoas'], 'singles.index' => ['heart', 'Solteiros'], 'profile' => ['people', 'Perfil']] as $route => [$icon, $label])
             @php($active = $route === 'home' ? request()->routeIs('home') : request()->routeIs(str_replace('.index', '.*', $route)))
             <a href="{{ route($route) }}" @class(['nav-item', 'active' => $active]) @if($active) aria-current="page" @endif><x-icon :name="$icon"/><span>{{ $label }}</span>@if($active)<span class="nav-dot"></span>@endif</a>
             @endforeach
@@ -32,7 +32,7 @@
     <main id="conteudo" class="main-content">@if(session('status'))<div class="status-message" role="status">{{ session('status') }}</div>@endif{{ $slot }}</main>
 </div>
 <nav class="mobile-nav" aria-label="Navegação móvel">
-    @foreach (['home' => ['home', 'Início'], 'churches.index' => ['compass', 'Explorar'], 'communities.index' => ['people', 'Comunidades'], 'profile' => ['heart', 'Perfil']] as $route => [$icon, $label])
+    @foreach (['home' => ['home', 'Início'], 'churches.index' => ['compass', 'Explorar'], 'communities.index' => ['people', 'Comunidades'], 'people.index' => ['people', 'Pessoas'], 'profile' => ['heart', 'Perfil']] as $route => [$icon, $label])
     @php($active = $route === 'home' ? request()->routeIs('home') : request()->routeIs(str_replace('.index', '.*', $route)))
     <a href="{{ route($route) }}" @class(['active' => $active]) @if($active) aria-current="page" @endif><x-icon :name="$icon"/><span>{{ $label }}</span></a>
     @endforeach

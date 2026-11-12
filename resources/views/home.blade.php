@@ -5,6 +5,9 @@
         <section class="welcome-banner"><x-landscape class="banner-landscape"/><div class="banner-copy"><span class="eyebrow">CONEXÕES COM PROPÓSITO</span><h2>Encontre seu lugar.<br>Viva em comunidade.</h2><p>A fé ganha vida nos encontros.<br>Descubra pessoas com quem caminhar.</p><a href="{{ route('communities.index') }}" class="button button-light">Explorar comunidades <x-icon name="arrow" size="17"/></a></div></section>
         <section class="discovery-strip" aria-label="Explore por interesse"><a href="{{ route('communities.index', ['type' => 'jovens']) }}"><span class="interest-icon tone-jovens"><x-icon name="people"/></span>Fazer parte</a><a href="{{ route('communities.index', ['type' => 'estudos']) }}"><span class="interest-icon tone-estudos"><x-icon name="book"/></span>Aprender juntos</a><a href="{{ route('communities.index', ['type' => 'voluntariado']) }}"><span class="interest-icon tone-voluntariado"><x-icon name="heart"/></span>Servir ao próximo</a></section>
         <x-composer/>
+@auth
+<nav class="filter-tabs" aria-label="Mural"><a href="{{ route('home') }}" @class(['selected'=>request('feed') !== 'following'])>Descobrir</a><a href="{{ route('home',['feed'=>'following']) }}" @class(['selected'=>request('feed') === 'following'])>Seguindo</a><a href="{{ route('people.index') }}">Encontrar pessoas →</a></nav>
+@endauth
 <div class="section-heading feed-heading"><div><span class="eyebrow">VIDA EM COMUNIDADE</span><h2>No mural da Kanaã</h2></div><span class="muted text-xs">Publicações públicas</span></div>
         <x-post-feed :posts="$posts"/>
     </div>
